@@ -1,0 +1,144 @@
+blueprint:
+  name: deConz - IKEA Symfonisk sound controller GEN2 for media (E2123)
+  description: Control anything using IKEA Symfonisk sound controller GEN2 for media
+  source_url: https://github.com/ChrisRichner/ha-blueprints/ikea_e2123/deconz-ikea-symfonisk-gen2-switch.yaml
+  domain: automation
+  input:
+    remote:
+      name: switch
+      description: IKEA Symfonisk sound controller GEN2 for media to use
+      selector:
+        device:
+          integration: deconz
+          manufacturer: IKEA of Sweden
+    button_play:
+      name: Play/Pause button press
+      description: Action to run on button press
+      default: []
+      selector:
+        action: {}
+    button_volume_up:
+      name: Volume Up button press
+      description: Action to run on button press
+      default: []
+      selector:
+        action: {}
+    button_volume_down:
+      name: Volume Down button press
+      description: Action to run on button press
+      default: []
+      selector:
+        action: {}
+    button_skip_next:
+      name: Skip to next button press
+      description: Action to run on button press
+      default: []
+      selector:
+        action: {}
+    button_repeat_last:
+      name: Repeat last button press
+      description: Action to run on button press
+      default: []
+      selector:
+        action: {}
+    button_shortcut_one:
+      name: Shortcut One button press
+      description: Action to run on button press
+      default: []
+      selector:
+        action: {}
+    button_shortcut_one_sr:
+      name: Shortcut One button short release
+      description: Action to run on button press
+      default: []
+      selector:
+        action: {}
+    button_shortcut_one_lr:
+      name: Shortcut One button long release
+      description: Action to run on button press
+      default: []
+      selector:
+        action: {}
+    button_shortcut_one_double:
+      name: Shortcut One button double press
+      description: Action to run on button press
+      default: []
+      selector:
+        action: {}
+    button_shortcut_two:
+      name: Shortcut Two button press
+      description: Action to run on button press
+      default: []
+      selector:
+        action: {}
+    button_shortcut_two_sr:
+      name: Shortcut Two button short release
+      description: Action to run on button press
+      default: []
+      selector:
+        action: {}
+    button_shortcut_two_lr:
+      name: Shortcut Two Button long release
+      description: Action to run on button press
+      default: []
+      selector:
+        action: {}
+    button_shortcut_two_double:
+      name: Shortcut Two Button double press
+      description: Action to run on button press
+      default: []
+      selector:
+        action: {}  
+mode: restart
+max_exceeded: silent
+trigger:
+  - platform: event
+    event_type: deconz_event
+    event_data:
+      device_id: !input "remote"
+action:
+  - variables:
+      event: "{{ trigger.event.data.event }}"
+  - choose:
+      - conditions:
+          - "{{ event == 1002 }}"
+        sequence: !input "button_play"
+      - conditions:
+          - "{{ event == 2002 }}"
+        sequence: !input "button_volume_up"
+      - conditions:
+          - "{{ event == 3002 }}"
+        sequence: !input "button_volume_down"
+      - conditions:
+          - "{{ event == 5002 }}"
+        sequence: !input "button_skip_next"
+      - conditions:
+          - "{{ event == 4002 }}"
+        sequence: !input "button_repeat_last"
+      - conditions:
+          - "{{ event == 6002 }}"
+        sequence: !input "button_shortcut_one"
+      - conditions:
+          - "{{ event == 6004 }}"
+        sequence: !input "button_shortcut_one_double"
+      - conditions:
+          - "{{ event == 6003 }}"
+        sequence: !input "button_shortcut_one_lr"
+      - conditions:
+          - "{{ event == 6001 }}"
+        sequence: !input "button_shortcut_one_sr"
+      - conditions:
+          - "{{ event == 6004 }}"
+        sequence: !input "button_shortcut_one_double"
+      - conditions:
+          - "{{ event == 7002 }}"
+        sequence: !input "button_shortcut_two"
+      - conditions:
+          - "{{ event == 7004 }}"
+        sequence: !input "button_shortcut_two_double"
+      - conditions:
+          - "{{ event == 7003 }}"
+        sequence: !input "button_shortcut_two_lr"
+      - conditions:
+          - "{{ event == 7001 }}"
+        sequence: !input "button_shortcut_two_sr"
